@@ -1,0 +1,23 @@
+{
+  "name": "msal-angular",
+  "version": "0.0.1",
+  "description": "Angular 4.3+ MSAL wrapper.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benbaran/msal-angular.git"
+  },
+  "keywords": [
+    "MSAL",
+    "Angular"
+  ],
+  "author": "Ben Baran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benbaran/msal-angular/issues"
+  },
+  "homepage": "https://github.com/benbaran/msal-angular#readme"
+}
