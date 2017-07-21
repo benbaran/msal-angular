@@ -29,6 +29,13 @@ export class MsalAuthenticationService {
     return false;
   }
 
+  get token() {
+
+    const token = this.app.getUser().token;
+
+    return token;
+  }
+
   public login() {
     return this.app.loginPopup(this.config.graphScopes)
       .then((idToken) => {
