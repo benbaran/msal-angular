@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import '../node_modules/msal/out/msal';
+import 'msal';
 /// <reference path="../node_modules/msal/out/msal.d.ts" />
 
 import { MsalAuthenticationConfig } from './msal-authentication-config';
