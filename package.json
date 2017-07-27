@@ -1,6 +1,6 @@
 {
     "name": "msal-angular",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Angular 4.3+ MSAL wrapper.",
     "main": "index.js",
     "scripts": {
