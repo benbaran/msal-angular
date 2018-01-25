@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
-import 'msal';
-/// <reference path="msal.d.ts" />
-
-import { MsalAuthenticationConfig } from './msal-authentication-config';
+import { MsalConfig } from './msal-config';
+import * as Msal from 'msal';
 
 @Injectable()
-export class MsalAuthenticationService {
+export class MsalService {
+
+  constructor() { }
 
   public error: string;
 
   private app: Msal.UserAgentApplication;
-  private config: MsalAuthenticationConfig;
+  private config: MsalConfig;
 
-  public init(configuration: MsalAuthenticationConfig) {
+  public init(configuration: MsalConfig) {
 
     this.config = configuration;
 
-    this.app = new Msal.UserAgentApplication(this.config.clientID, '', () => {
-      // No callback
-    });
+    this.app = new Msal.UserAgentApplication(this.config.clientID, '', () => {});
   }
 
   get authenticated() {
@@ -31,7 +29,7 @@ export class MsalAuthenticationService {
 
   get token() {
 
-    const token = this.app.getUser().token;
+    const token = this.getToken();
 
     return token;
   }
