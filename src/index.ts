@@ -1,4 +1,4 @@
-export * from './msal-config';
-export * from './msal.service';
-export * from './msal.guard';
-export * from './msal.interceptor';
+export { MsalConfig } from './msal-config';
+export { MsalService } from './msal.service';
+export { MsalGuard } from './msal.guard';
+export { MsalInterceptor } from './msal.interceptor';
