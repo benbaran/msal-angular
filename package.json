@@ -1,6 +1,6 @@
 {
     "name": "msal-angular",
-    "version": "0.0.8",
+    "version": "0.0.10",
     "description": "Angular MSAL wrapper.",
     "main": "index.js",
     "scripts": {
@@ -36,5 +36,13 @@
         "gulp-typescript": "^3.2.4",
         "merge2": "^1.2.1",
         "typescript": "^2.6.2"
+    },
+    "peerDependencies": {
+        "@angular/common": "^5.2.2",
+        "@angular/core": "^5.2.2",
+        "@angular/platform-browser": "^5.2.2",
+        "@angular/router": "^5.2.2",
+        "rxjs": "^5.5.6",
+        "zone.js": "^0.8.20"
     }
 }

@@ -54,6 +54,9 @@ gulp.task('package', ['bundle'], () => {
     // remove the devDependencies section
     delete pkgjson.devDependencies;
 
+    // remove the devDependencies section
+    delete pkgjson.dependencies;
+    
     const filepath = './dist/package.json';
 
     fs.writeFileSync(filepath, JSON.stringify(pkgjson, null, 2), 'utf-8');
