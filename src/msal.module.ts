@@ -1,7 +1,12 @@
 import { MsalConfig } from "./msal-config";
-import { ModuleWithProviders } from "@angular/core";
+import { ModuleWithProviders, NgModule } from "@angular/core";
 import { MsalService } from "./msal.service";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { MsalInterceptor } from ".";
 
+@NgModule({
+    providers: [{ provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true }]
+})
 export class MsalModule {
     static forRoot(config: MsalConfig): ModuleWithProviders {
         return {
@@ -10,3 +15,4 @@ export class MsalModule {
         };
     }
 }
+
