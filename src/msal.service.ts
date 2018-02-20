@@ -11,12 +11,19 @@ export class MsalService {
 
   private app: Msal.UserAgentApplication;
   private config: MsalConfig;
+  private authority: string;
 
   public init(configuration: MsalConfig) {
 
     this.config = configuration;
+    if (this.config.tenant !== null && this.config.signUpSignInPolicy !== null) {
+      // Configure the authority for Azure AD B2C
+      this.authority = "https://login.microsoftonline.com/tfp/" + this.config.tenant + "/" + this.config.signUpSignInPolicy;
+    } else {
+      this.authority = "";
+    }
 
-    this.app = new Msal.UserAgentApplication(this.config.clientID, '', () => {});
+    this.app = new Msal.UserAgentApplication(this.config.clientID, this.authority, () => { });
   }
 
   get authenticated() {
