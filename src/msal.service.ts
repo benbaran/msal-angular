@@ -5,36 +5,15 @@ import * as Msal from 'msal';
 @Injectable()
 export class MsalService {
 
-  
   public error: string;
 
   private app: Msal.UserAgentApplication;
-  //private config: MsalConfig;
-  private authority: string;
 
-  constructor(private config: MsalConfig) { 
-    this.config = config;
-    if (this.config.tenant !== null && this.config.signUpSignInPolicy !== null) {
-      // Configure the authority for Azure AD B2C
-      this.authority = "https://login.microsoftonline.com/tfp/" + this.config.tenant + "/" + this.config.signUpSignInPolicy;
-    } else {
-      this.authority = "";
-    }
-
-    this.app = new Msal.UserAgentApplication(this.config.clientID, this.authority, () => { });
-  }
-
-  public init(configuration: MsalConfig) {
-    // this.config = configuration;
-    // if (this.config.tenant !== null && this.config.signUpSignInPolicy !== null) {
-    //   // Configure the authority for Azure AD B2C
-    //   this.authority = "https://login.microsoftonline.com/tfp/" + this.config.tenant + "/" + this.config.signUpSignInPolicy;
-    // } else {
-    //   this.authority = "";
-    // }
-
-    // this.app = new Msal.UserAgentApplication(this.config.clientID, this.authority, () => { });
-   
+  constructor(private config: MsalConfig) {
+     const authority = (config.tenant && config.signUpSignInPolicy) ?
+      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
+      "";
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
   }
 
   get authenticated() {
