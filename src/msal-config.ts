@@ -1,7 +1,7 @@
 export interface MsalConfig {
     clientID: string;
-    redirectUri: string;
     graphScopes: string[];
+    redirectUri? : string;
     signUpSignInPolicy?: string;
     tenant?: string;
 }

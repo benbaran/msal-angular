@@ -15,7 +15,7 @@ export class MsalService {
     const authority = (config.tenant && config.signUpSignInPolicy) ?
       `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
       "";
-    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { }, { redirectUri: config.redirectUri });
   }
 
   get authenticated() {
@@ -36,14 +36,15 @@ export class MsalService {
   public login() {
     return this.app.loginPopup(this.config.graphScopes)
       .then((idToken) => {
-        const user = this.app.getUser();
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
-      }, () => {
-        return null;
+        return this.getToken();
+      //   const user = this.app.getUser();
+      //   if (user) {
+      //     return user;
+      //   } else {
+      //     return null;
+      //   }
+      // }, () => {
+      //   return null;
       });
   }
 
