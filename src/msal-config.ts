@@ -1,3 +1,6 @@
+import { Injectable } from "@angular/core";
+
+@Injectable()
 export class MsalConfig {
     public clientID: string;
     public redirectUri: string;
