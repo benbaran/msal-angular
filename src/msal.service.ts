@@ -27,10 +27,14 @@ export class MsalService {
   }
 
   public login() {
-    return this.app.loginPopup(this.config.graphScopes)
-      .then((idToken) => {
-        return this.getToken().then(() => this.app.getUser());
-      });
+    return new Promise(resolve => {
+      this.app.loginPopup(this.config.graphScopes)
+        .then((idToken) => {
+          this.getToken().then(() => {
+            resolve(this.app.getUser());
+          });
+        });
+    });
   }
 
   public logout() {
