@@ -19,32 +19,17 @@ export class MsalService {
   }
 
   get authenticated() {
-    const user = this.app.getUser();
-    if (user) {
-      return true;
-    }
-    return false;
+    return !!this.app.getUser()
   }
 
   get token() {
-
-    const token = this.getToken();
-
-    return token;
+    return this.getToken();
   }
 
   public login() {
     return this.app.loginPopup(this.config.graphScopes)
       .then((idToken) => {
-        return this.getToken();
-      //   const user = this.app.getUser();
-      //   if (user) {
-      //     return user;
-      //   } else {
-      //     return null;
-      //   }
-      // }, () => {
-      //   return null;
+        return this.getToken().then(() => this.app.getUser());
       });
   }
 
