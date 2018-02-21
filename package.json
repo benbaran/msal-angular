@@ -1,5 +1,5 @@
 {
-    "name": "@citolab/msal-angular",
+    "name": "msal-angular",
     "version": "0.0.11",
     "description": "Angular MSAL wrapper.",
     "main": "index.js",
