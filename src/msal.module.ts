@@ -5,7 +5,7 @@ import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MsalInterceptor, MsalGuard } from ".";
 
 @NgModule({
-    providers: [MsalGuard ,{ provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true }]
+    providers: [MsalGuard, MsalConfig, { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true }]
 })
 export class MsalModule {
     static forRoot(config: MsalConfig): ModuleWithProviders {
