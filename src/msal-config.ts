@@ -1,10 +1,8 @@
-import { Injectable } from "@angular/core";
-
-@Injectable()
-export class MsalConfig {
-    public clientID: string;
-    public redirectUri: string;
-    public graphScopes: string[];
-    public signUpSignInPolicy: string;
-    public tenant: string;
+export interface MsalConfig {
+    clientID: string;
+    redirectUri: string;
+    graphScopes: string[];
+    signUpSignInPolicy?: string;
+    tenant?: string;
 }
+

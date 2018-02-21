@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { MsalConfig } from './msal-config';
 import * as Msal from 'msal';
+
+export const MSAL_CONFIG = new InjectionToken<string>('MSAL_CONFIG');
 
 @Injectable()
 export class MsalService {
@@ -9,8 +11,8 @@ export class MsalService {
 
   private app: Msal.UserAgentApplication;
 
-  constructor(private config: MsalConfig) {
-     const authority = (config.tenant && config.signUpSignInPolicy) ?
+  constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
+    const authority = (config.tenant && config.signUpSignInPolicy) ?
       `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
       "";
     this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
