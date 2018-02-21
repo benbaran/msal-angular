@@ -15,7 +15,7 @@ export class MsalService {
     const authority = (config.tenant && config.signUpSignInPolicy) ?
       `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
       "";
-    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { }, { redirectUri: config.redirectUri });
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
   }
 
   get authenticated() {
