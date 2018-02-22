@@ -52,7 +52,7 @@ export class MsalService {
             resolve(accessToken);
           }, (err) => {
             this.error = err;
-            reject(err);
+            resolve(null); //don't reject but just return null;
           });
       });
     });
