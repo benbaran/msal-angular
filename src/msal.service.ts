@@ -42,16 +42,20 @@ export class MsalService {
   }
 
   public getToken() {
-    return this.app.acquireTokenSilent(this.config.graphScopes)
+    return new Promise((resolve, reject) => {
+      this.app.acquireTokenSilent(this.config.graphScopes)
       .then((accessToken) => {
-        return accessToken;
+        resolve(accessToken);
       }, (error) => {
-        return this.app.acquireTokenPopup(this.config.graphScopes)
+        this.app.acquireTokenPopup(this.config.graphScopes)
           .then((accessToken) => {
-            return accessToken;
+            resolve(accessToken);
           }, (err) => {
             this.error = err;
+            reject(err);
           });
       });
+    });
+    
   }
 }
