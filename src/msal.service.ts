@@ -12,9 +12,8 @@ export class MsalService {
   private app: Msal.UserAgentApplication;
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
-    const authority = (config.tenant && config.signUpSignInPolicy) ? `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
-    // //const authority = (config.tenant && config.signUpSignInPolicy) ?
-    // `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :    "";
+    const authority = (config.tenant && config.signUpSignInPolicy) ? 
+      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
     this.app = new Msal.UserAgentApplication(
       config.clientID,
       authority,
@@ -51,7 +50,6 @@ export class MsalService {
           .then(token => {
             return Promise.resolve(token);
           }).catch(innererror => {
-            console.error('Could not retrieve token from popup.', innererror);
             return Promise.resolve('');
           });
       });
