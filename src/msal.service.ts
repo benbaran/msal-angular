@@ -1,50 +1,57 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { MsalConfig } from './msal-config';
 import * as Msal from 'msal';
+
+export const MSAL_CONFIG = new InjectionToken<string>('MSAL_CONFIG');
 
 @Injectable()
 export class MsalService {
 
-  constructor() { }
-
   public error: string;
 
   private app: Msal.UserAgentApplication;
-  private config: MsalConfig;
 
-  public init(configuration: MsalConfig) {
-
-    this.config = configuration;
-
-    this.app = new Msal.UserAgentApplication(this.config.clientID, '', () => {});
+  constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
+    const authority = (config.tenant && config.signUpSignInPolicy) ? 
+      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
+    this.app = new Msal.UserAgentApplication(
+      config.clientID,
+      authority,
+      this.authCallback,
+      {
+        redirectUri: window.location.origin
+      });
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
   }
 
   get authenticated() {
-    const user = this.app.getUser();
-    if (user) {
-      return true;
-    }
-    return false;
+    return !!this.app.getUser()
   }
 
   get token() {
-
-    const token = this.getToken();
-
-    return token;
+    return this.getToken();
   }
 
   public login() {
     return this.app.loginPopup(this.config.graphScopes)
       .then((idToken) => {
-        const user = this.app.getUser();
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
-      }, () => {
-        return null;
+        return this.getToken().then(() => {
+          Promise.resolve(this.app.getUser());
+        });
+      });
+  };
+  
+  public getToken(): Promise<string> {
+    return this.app.acquireTokenSilent(this.config.graphScopes)
+      .then(token => {
+        return token;
+      }).catch(error => {
+        return this.app.acquireTokenPopup(this.config.graphScopes)
+          .then(token => {
+            return Promise.resolve(token);
+          }).catch(innererror => {
+            return Promise.resolve('');
+          });
       });
   }
 
@@ -52,17 +59,10 @@ export class MsalService {
     this.app.logout();
   }
 
-  public getToken() {
-    return this.app.acquireTokenSilent(this.config.graphScopes)
-      .then((accessToken) => {
-        return accessToken;
-      }, (error) => {
-        return this.app.acquireTokenPopup(this.config.graphScopes)
-          .then((accessToken) => {
-            return accessToken;
-          }, (err) => {
-            this.error = err;
-          });
-      });
+  private authCallback(errorDesc: any, token: any, error: any, tokenType: any) {
+    if (error) {
+      console.error(`${error} ${errorDesc}`);
+    }
   }
+
 }

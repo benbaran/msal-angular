@@ -1,5 +1,7 @@
-export class MsalConfig {
-    public clientID: string;
-    public redirectUri: string;
-    public graphScopes: string[];
+export interface MsalConfig {
+    clientID: string;
+    graphScopes: string[];
+    signUpSignInPolicy?: string;
+    tenant?: string;
 }
+
