@@ -18,7 +18,7 @@ export class MsalService {
   }
 
   get authenticated() {
-    return !!this.app.getUser()
+    return !!this.app.getUser();
   }
 
   get token() {
@@ -32,7 +32,7 @@ export class MsalService {
           Promise.resolve(this.app.getUser());
         });
       });
-  };
+  }
 
   public getToken(): Promise<string> {
     return this.app.acquireTokenSilent(this.config.graphScopes)
