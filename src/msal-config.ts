@@ -3,5 +3,6 @@ export interface MsalConfig {
     graphScopes: string[];
     signUpSignInPolicy?: string;
     tenant?: string;
+    popup: boolean;
 }
 
