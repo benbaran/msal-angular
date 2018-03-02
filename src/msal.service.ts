@@ -8,7 +8,7 @@ export const MSAL_CONFIG = new InjectionToken<string>('MSAL_CONFIG');
 export class MsalService {
 
   public error: string;
-  public user;
+  public user: any;
 
   private app: Msal.UserAgentApplication;
 
