@@ -8,6 +8,7 @@ export const MSAL_CONFIG = new InjectionToken<string>('MSAL_CONFIG');
 export class MsalService {
 
   public error: string;
+  public user: any;
 
   private app: Msal.UserAgentApplication;
 
@@ -25,7 +26,16 @@ export class MsalService {
   }
 
   get authenticated() {
-    return !!this.app.getUser()
+    if(!this.user) {
+      this.user = this.app.getUser();
+    }
+    return !!this.user;
+  }
+
+  public getUser(){
+    if(this.authenticated)
+      return this.user;
+    return {};
   }
 
   get token() {
@@ -71,6 +81,7 @@ export class MsalService {
   }
 
   public logout() {
+    this.user=null;
     this.app.logout();
   }
 
@@ -79,5 +90,4 @@ export class MsalService {
       console.error(`${error} ${errorDesc}`);
     }
   }
-
 }
