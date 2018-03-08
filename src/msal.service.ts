@@ -14,26 +14,20 @@ export class MsalService {
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
     const authority = (config.tenant && config.signUpSignInPolicy) ?
-      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
-    this.app = new Msal.UserAgentApplication(
-      config.clientID,
-      authority,
-      this.authCallback,
-      {
-        redirectUri: window.location.origin
-      });
-    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
+      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
+      '';
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback, { navigateToLoginRequestUrl: false });
   }
 
   get authenticated() {
-    if(!this.user) {
+    if (!this.user) {
       this.user = this.app.getUser();
     }
     return !!this.user;
   }
 
-  public getUser(){
-    if(this.authenticated)
+  public getUser() {
+    if (this.authenticated)
       return this.user;
     return {};
   }
@@ -65,7 +59,7 @@ export class MsalService {
       Promise.resolve(this.app.getUser());
     });
   }
-  
+
   public getToken(): Promise<string> {
     return this.app.acquireTokenSilent(this.config.graphScopes)
       .then(token => {
@@ -81,7 +75,7 @@ export class MsalService {
   }
 
   public logout() {
-    this.user=null;
+    this.user = null;
     this.app.logout();
   }
 
