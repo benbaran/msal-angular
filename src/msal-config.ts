@@ -5,7 +5,7 @@ export class MsalConfig {
     public graphScopes: string[];
     public signUpSignInPolicy?: string;
     public tenant?: string;
-    public popup?: boolean = false;
+    public popup?: boolean = true;
     public callback?: tokenReceivedCallback =
         (errorDesc: any, token: any, error: any, tokenType: any) => {
             if (error) {
