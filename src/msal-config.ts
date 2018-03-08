@@ -6,6 +6,10 @@ export class MsalConfig {
     public signUpSignInPolicy?: string;
     public tenant?: string;
     public popup?: boolean = false;
-    public callback: tokenReceivedCallback = () => { };
+    public callback: tokenReceivedCallback =
+        (errorDesc: any, token: any, error: any, tokenType: any) => {
+            if (error) {
+                console.error(`${error} ${errorDesc}`);
+            };
+        }
 }
-
