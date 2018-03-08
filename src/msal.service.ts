@@ -19,12 +19,6 @@ export class MsalService {
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback, { navigateToLoginRequestUrl: false });
   }
 
-  get authenticated() {
-    if (!this.user) {
-      this.user = this.app.getUser();
-    }
-    return !!this.user;
-  }
 
   public getUser() {
     if (this.authenticated)
@@ -32,32 +26,20 @@ export class MsalService {
     return {};
   }
 
+
+  get authenticated() {
+    return !!this.app.getUser();
+  }
+
+
   get token() {
     return this.getToken();
   }
 
   public login() {
-    if (this.config.popup) {
-      return this.loginPopup();
-    } else {
-      return this.loginRedirect();
-    }
-  };
-
-  private loginPopup() {
-    return this.app.loginPopup(this.config.graphScopes)
-      .then((idToken) => {
-        return this.getToken().then(() => {
-          Promise.resolve(this.app.getUser());
-        });
-      });
-  }
-
-  private loginRedirect() {
-    this.app.loginRedirect(this.config.graphScopes);
-    return this.getToken().then(() => {
-      Promise.resolve(this.app.getUser());
-    });
+    return this.config.popup ?
+      this.loginPopup() :
+      this.loginRedirect()
   }
 
   public getToken(): Promise<string> {
@@ -79,9 +61,19 @@ export class MsalService {
     this.app.logout();
   }
 
-  private authCallback(errorDesc: any, token: any, error: any, tokenType: any) {
-    if (error) {
-      console.error(`${error} ${errorDesc}`);
-    }
+  private loginPopup() {
+    return this.app.loginPopup(this.config.graphScopes)
+      .then((idToken) => {
+        return this.getToken().then(() => {
+          Promise.resolve(this.app.getUser());
+        });
+      });
+  }
+
+  private loginRedirect() {
+    this.app.loginRedirect(this.config.graphScopes);
+    return this.getToken().then(() => {
+      Promise.resolve(this.app.getUser());
+    });
   }
 }
