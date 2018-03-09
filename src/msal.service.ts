@@ -95,9 +95,7 @@ export class MsalService {
 
   private getFullUrl(url: string): string {
     const pat = /^https?:\/\//i;
-    const fullUrl = pat.test(url) ? url : this.origin() + url;
-    console.log(fullUrl);
-    return fullUrl;
+    return pat.test(url) ? url : this.origin() + url;
   }
 
   private origin() {
