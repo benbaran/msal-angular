@@ -6,6 +6,8 @@ export class MsalConfig {
     public signUpSignInPolicy?: string;
     public tenant?: string;
     public popup?: boolean = true;
+    public navigateToLoginRequestUrl? = false;
+    public redirectUrl? = window.location.href;
     public callback?: tokenReceivedCallback =
         (errorDesc: any, token: any, error: any, tokenType: any) => {
             if (error) {
