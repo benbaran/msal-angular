@@ -21,74 +21,75 @@ export class MsalService {
         navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
         redirectUri: this.config.redirectUrl
       });
-}
+  }
 
 
   public getUser() {
-  if (this.authenticated)
-    return this.user;
-  return {};
-}
+    if (this.authenticated) {
+      return this.user;
+    }
+    return {};
+  }
 
 
-get authenticated() {
-  return this.token.then(t => !!t);
-}
+  get authenticated() {
+    return this.token.then(t => !!t);
+  }
 
 
-get token() {
-  return this.getToken();
-}
+  get token() {
+    return this.getToken();
+  }
 
   public login() {
-  return this.config.popup ?
-    this.loginPopup() :
-    this.loginRedirect()
-}
+    return this.config.popup ?
+      this.loginPopup() :
+      this.loginRedirect();
+  }
 
-  public getToken(): Promise < string > {
-  return this.app.acquireTokenSilent(this.config.b2cScopes)
-    .then(token => {
-      return token;
-    }).catch(error => {
-      return this.app.acquireTokenPopup(this.config.b2cScopes)
-        .then(token => {
-          return Promise.resolve(token);
-        }).catch(innererror => {
-          return Promise.resolve('');
-        });
-    });
-}
-
-  public logout() {
-  this.user = null;
-  this.app.logout();
-}
-
-  public loginPopup() {
-  return this.app.loginPopup(this.config.b2cScopes).then((idToken) => {
-    this.app.acquireTokenSilent(this.config.b2cScopes).then(
-      (token: string) => {
-        return Promise.resolve(token);
-      }, (error: string) => {
-        this.app.acquireTokenPopup(this.config.b2cScopes).then(
-          (token: string) => {
+  public getToken(): Promise<string> {
+    return this.app.acquireTokenSilent(this.config.b2cScopes)
+      .then(token => {
+        return token;
+      }).catch(error => {
+        return this.app.acquireTokenPopup(this.config.b2cScopes)
+          .then(token => {
             return Promise.resolve(token);
-          }, (error: any) => {
-            console.log("Error acquiring the popup:\n" + error);
+          }).catch(innererror => {
             return Promise.resolve('');
           });
-      })
-  }, (error: any) => {
-    console.log("Error during login:\n" + error);
-    return Promise.resolve('');
-  });
-}
+      });
+  }
+
+  public logout() {
+    this.user = null;
+    this.app.logout();
+  }
+
+  public loginPopup() {
+    return this.app.loginPopup(this.config.b2cScopes).then((idToken) => {
+      this.app.acquireTokenSilent(this.config.b2cScopes).then(
+        (token: string) => {
+          return Promise.resolve(token);
+        }, (error: any) => {
+          this.app.acquireTokenPopup(this.config.b2cScopes).then(
+            (token: string) => {
+              return Promise.resolve(token);
+            }, (innererror: any) => {
+              console.log('Error acquiring the popup:\n' + innererror);
+              return Promise.resolve('');
+            });
+        });
+    }, (error: any) => {
+      console.log('Error during login:\n' + error);
+      return Promise.resolve('');
+    });
+  }
 
   private loginRedirect() {
-  this.app.loginRedirect(this.config.b2cScopes);
-  return this.getToken().then(() => {
-    Promise.resolve(this.app.getUser());
-  });
-}
+    this.app.loginRedirect(this.config.b2cScopes);
+    return this.getToken().then(() => {
+      Promise.resolve(this.app.getUser());
+    });
+  }
 }
