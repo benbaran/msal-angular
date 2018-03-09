@@ -19,7 +19,7 @@ export class MsalService {
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
         navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
-        redirectUri: this.config.redirectUrl
+        redirectUri: this.getFullUrl(this.config.redirectUrl)
       });
   }
 
@@ -91,5 +91,17 @@ export class MsalService {
     return this.getToken().then(() => {
       Promise.resolve(this.app.getUser());
     });
+  }
+
+  private getFullUrl(url: string): string {
+    const pat = /^https?:\/\//i;
+    const fullUrl = pat.test(url) ? url : this.origin() + url;
+    console.log(fullUrl);
+    return fullUrl;
+  }
+
+  private origin() {
+    return (window.location.origin) ? window.location.origin :
+      window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
   }
 }
