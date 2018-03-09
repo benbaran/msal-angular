@@ -43,11 +43,11 @@ export class MsalService {
   }
 
   public getToken(): Promise<string> {
-    return this.app.acquireTokenSilent(this.config.graphScopes)
+    return this.app.acquireTokenSilent(this.config.b2cScopes)
       .then(token => {
         return token;
       }).catch(error => {
-        return this.app.acquireTokenPopup(this.config.graphScopes)
+        return this.app.acquireTokenPopup(this.config.b2cScopes)
           .then(token => {
             return Promise.resolve(token);
           }).catch(innererror => {
