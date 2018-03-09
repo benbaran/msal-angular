@@ -61,17 +61,28 @@ export class MsalService {
     this.app.logout();
   }
 
-  private loginPopup() {
-    return this.app.loginPopup(this.config.graphScopes)
-      .then((idToken) => {
-        return this.getToken().then(() => {
-          Promise.resolve(this.app.getUser());
-        });
-      });
+  public loginPopup() {
+   return this.app.loginPopup(this.config.b2cScopes).then((idToken) => {
+      this.app.acquireTokenSilent(this.config.b2cScopes).then(
+        (token: string) => {
+          return Promise.resolve(token);
+        }, (error: string) => {
+          this.app.acquireTokenPopup(this.config.b2cScopes).then(
+            (token: string) => {
+              return Promise.resolve(token);
+            }, (error: any) => {
+              console.log("Error acquiring the popup:\n" + error);
+              return Promise.resolve('');
+            });
+        })
+    }, (error: any) => {
+      console.log("Error during login:\n" + error);
+      return Promise.resolve('');
+    });
   }
 
   private loginRedirect() {
-    this.app.loginRedirect(this.config.graphScopes);
+    this.app.loginRedirect(this.config.b2cScopes);
     return this.getToken().then(() => {
       Promise.resolve(this.app.getUser());
     });
