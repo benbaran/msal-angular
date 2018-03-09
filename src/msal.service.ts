@@ -28,7 +28,7 @@ export class MsalService {
 
 
   get authenticated() {
-    return !!this.app.getUser();
+    return this.token.then(t => !!t);
   }
 
 
