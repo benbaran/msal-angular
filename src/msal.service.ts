@@ -48,11 +48,11 @@ export class MsalService {
   }
 
   public getToken(): Promise<string> {
-    return this.app.acquireTokenSilent(this.config.b2cScopes)
+    return this.app.acquireTokenSilent(this.config.graphScopes)
       .then(token => {
         return token;
       }).catch(error => {
-        return this.app.acquireTokenPopup(this.config.b2cScopes)
+        return this.app.acquireTokenPopup(this.config.graphScopes)
           .then(token => {
             return Promise.resolve(token);
           }).catch(innererror => {
@@ -67,12 +67,12 @@ export class MsalService {
   }
 
   public loginPopup() {
-    return this.app.loginPopup(this.config.b2cScopes).then((idToken) => {
-      this.app.acquireTokenSilent(this.config.b2cScopes).then(
+    return this.app.loginPopup(this.config.graphScopes).then((idToken) => {
+      this.app.acquireTokenSilent(this.config.graphScopes).then(
         (token: string) => {
           return Promise.resolve(token);
         }, (error: any) => {
-          this.app.acquireTokenPopup(this.config.b2cScopes).then(
+          this.app.acquireTokenPopup(this.config.graphScopes).then(
             (token: string) => {
               return Promise.resolve(token);
             }, (innererror: any) => {
@@ -87,13 +87,14 @@ export class MsalService {
   }
 
   private loginRedirect() {
-    this.app.loginRedirect(this.config.b2cScopes);
+    this.app.loginRedirect(this.config.graphScopes);
     return this.getToken().then(() => {
       Promise.resolve(this.app.getUser());
     });
   }
 
   private getFullUrl(url: string): string {
+    // this create a absolute url from a relative one.
     const pat = /^https?:\/\//i;
     return pat.test(url) ? url : this.origin() + url;
   }

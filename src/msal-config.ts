@@ -2,7 +2,7 @@ import { tokenReceivedCallback } from 'msal/lib-commonjs/UserAgentApplication';
 
 export class MsalConfig {
     public clientID: string;
-    public b2cScopes: string[];
+    public graphScopes: string[];
     public signUpSignInPolicy?: string;
     public tenant?: string;
     public popup ? = true;
