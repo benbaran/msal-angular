@@ -14,8 +14,7 @@ export class MsalService {
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
     const authority = (config.tenant && config.signUpSignInPolicy) ?
-      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` :
-      '';
+      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
         navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
@@ -23,19 +22,13 @@ export class MsalService {
       });
   }
 
-
   public getUser() {
-    if (this.authenticated) {
-      return this.user;
-    }
-    return {};
+    return this.authenticated.then(isauthenticated => isauthenticated ? this.user : {});
   }
-
 
   get authenticated() {
     return this.token.then(t => !!t);
   }
-
 
   get token() {
     return this.getToken();

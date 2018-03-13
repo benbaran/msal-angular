@@ -14,7 +14,7 @@ This is a wrapper module to authenticate Angular applications to the Azure v2 en
  - Updated msal from 0.14 to 0.15.
 
 #### BREAKING CHANGES: 
- - authenticated() returns a Promise<boolean> instead of a boolean.
+ - authenticated() and getUser() return a Promise.
 
 ### 2.0.1
 - Updated for Angular 5
