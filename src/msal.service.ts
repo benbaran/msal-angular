@@ -50,6 +50,10 @@ export class MsalService {
         });
       });
   };
+
+  public loginRedirect() {
+    return this.app.loginRedirect(this.config.graphScopes);
+  };
   
   public getToken(): Promise<string> {
     return this.app.acquireTokenSilent(this.config.graphScopes)
