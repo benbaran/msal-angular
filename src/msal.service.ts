@@ -13,29 +13,21 @@ export class MsalService {
   private app: Msal.UserAgentApplication;
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
-    const authority = (config.tenant && config.signUpSignInPolicy) ? 
+    const authority = (config.tenant && config.signUpSignInPolicy) ?
       `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
-    this.app = new Msal.UserAgentApplication(
-      config.clientID,
-      authority,
-      this.authCallback,
+    this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
-        redirectUri: window.location.origin
+        navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
+        redirectUri: this.getFullUrl(this.config.redirectUrl)
       });
-    this.app = new Msal.UserAgentApplication(config.clientID, authority, () => { });
+  }
+
+  public getUser() {
+    return this.authenticated.then(isauthenticated => isauthenticated ? this.user : {});
   }
 
   get authenticated() {
-    if(!this.user) {
-      this.user = this.app.getUser();
-    }
-    return !!this.user;
-  }
-
-  public getUser(){
-    if(this.authenticated)
-      return this.user;
-    return {};
+    return this.token.then(t => !!t);
   }
 
   get token() {
@@ -43,14 +35,11 @@ export class MsalService {
   }
 
   public login() {
-    return this.app.loginPopup(this.config.graphScopes)
-      .then((idToken) => {
-        return this.getToken().then(() => {
-          Promise.resolve(this.app.getUser());
-        });
-      });
-  };
-  
+    return this.config.popup ?
+      this.loginPopup() :
+      this.loginRedirect();
+  }
+
   public getToken(): Promise<string> {
     return this.app.acquireTokenSilent(this.config.graphScopes)
       .then(token => {
@@ -66,13 +55,45 @@ export class MsalService {
   }
 
   public logout() {
-    this.user=null;
+    this.user = null;
     this.app.logout();
   }
 
-  private authCallback(errorDesc: any, token: any, error: any, tokenType: any) {
-    if (error) {
-      console.error(`${error} ${errorDesc}`);
-    }
+  public loginPopup() {
+    return this.app.loginPopup(this.config.graphScopes).then((idToken) => {
+      this.app.acquireTokenSilent(this.config.graphScopes).then(
+        (token: string) => {
+          return Promise.resolve(token);
+        }, (error: any) => {
+          this.app.acquireTokenPopup(this.config.graphScopes).then(
+            (token: string) => {
+              return Promise.resolve(token);
+            }, (innererror: any) => {
+              console.log('Error acquiring the popup:\n' + innererror);
+              return Promise.resolve('');
+            });
+        });
+    }, (error: any) => {
+      console.log('Error during login:\n' + error);
+      return Promise.resolve('');
+    });
+  }
+
+  private loginRedirect() {
+    this.app.loginRedirect(this.config.graphScopes);
+    return this.getToken().then(() => {
+      Promise.resolve(this.app.getUser());
+    });
+  }
+
+  private getFullUrl(url: string): string {
+    // this create a absolute url from a relative one.
+    const pat = /^https?:\/\//i;
+    return pat.test(url) ? url : this.origin() + url;
+  }
+
+  private origin() {
+    return (window.location.origin) ? window.location.origin :
+      window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
   }
 }

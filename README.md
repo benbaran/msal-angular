@@ -7,6 +7,15 @@ This is a wrapper module to authenticate Angular applications to the Azure v2 en
 
 ## Change Log
 
+### 2.0.2
+ - Added an option to redirect instead of the popup login
+ - Added configuration options navigateToLoginRequestUrl, redirectUrl and callback.
+ - Fixed authenticated() returning true when token is expired.
+ - Updated msal from 0.14 to 0.15.
+
+#### BREAKING CHANGES: 
+ - authenticated() and getUser() return a Promise.
+
 ### 2.0.1
 - Updated for Angular 5
 - Several improvements contributed by Marcelh1983
@@ -58,7 +67,20 @@ npm install msal-angular --save
     this.msalService.logout();
   }
 
-  get authenticated(): boolean {
+  get authenticated(): Promise<boolean> {
     return this.msalService.authenticated;
   }
 ```
+
+#### 3. Config
+
+ - clientID: Specifies the Azure AD client id/application Id of the calling web service;
+ - graphScopes: Allows the client to express the desired scope of the access request;
+ - signUpSignInPolicy: Name of the Sign-up or sign-in policy (optional*);
+ - tenant: Url of the tenant xxx.onmicrosoft.com (optional*)
+ - popup: show login popup or redirect (optional, default: true);
+ - navigateToLoginRequestUrl: Ability to turn off default navigation to start page after login. (optional, default: false);
+ - redirectUrl: Location to redirect, can be a relative of absolute url. (optional, default: window.location.href);
+ - callback: Callback function after login;
+
+\* signUpSignInPolicy and tenant will only be applied when both values are filled.

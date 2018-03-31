@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { MsalService } from './msal.service';
 import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/mergeMap'
+import 'rxjs/add/operator/mergeMap';
 @Injectable()
 export class MsalInterceptor implements HttpInterceptor {
 
@@ -17,6 +17,6 @@ export class MsalInterceptor implements HttpInterceptor {
                     Authorization: JWT,
                 },
             });
-        })).mergeMap(req => next.handle(req));
+        })).mergeMap(r => next.handle(r));
     }
 }
