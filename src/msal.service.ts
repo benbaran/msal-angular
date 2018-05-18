@@ -13,8 +13,7 @@ export class MsalService {
   private app: Msal.UserAgentApplication;
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
-    const authority = (config.tenant && config.signUpSignInPolicy) ?
-      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
+    const authority = config.authority;
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
         navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
