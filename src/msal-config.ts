@@ -6,7 +6,7 @@ export class MsalConfig {
     public popup ? = true;
     public navigateToLoginRequestUrl ? = false;
     public redirectUrl ? = window.location.href;
-    public authority: '';
+    public authority: string = '';
     public callback?: tokenReceivedCallback =
         (errorDesc: any, token: any, error: any, tokenType: any) => {
             if (error) {
