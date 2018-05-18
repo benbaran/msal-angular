@@ -8,9 +8,7 @@ export class MsalGuard implements CanActivate {
 
   constructor(private msalService: MsalService) { }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate() {
     return this.msalService.authenticated;
   }
 }
