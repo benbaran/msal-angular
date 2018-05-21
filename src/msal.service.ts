@@ -11,6 +11,14 @@ export class MsalService {
   private app: Msal.UserAgentApplication;
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
+    // set default values.
+    this.config = {
+      ...this.config,
+      popup: this.config.popup ? this.config.popup : false,
+      callback: this.config.callback ? this.config.callback : () => { },
+      redirectUrl: this.config.redirectUrl ? this.config.redirectUrl : window.location.href,
+      navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl ? this.config.navigateToLoginRequestUrl : false
+    }
     const authority = config.authority;
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
