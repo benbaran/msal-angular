@@ -14,7 +14,7 @@ export class MsalService {
     // set default values.
     this.config = {
       ...this.config,
-      popup: this.config.popup ? this.config.popup : false,
+      popup: this.config.popup ? this.config.popup : true,
       callback: this.config.callback ? this.config.callback : () => { },
       redirectUrl: this.config.redirectUrl ? this.config.redirectUrl : window.location.href,
       navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl ? this.config.navigateToLoginRequestUrl : false
