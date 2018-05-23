@@ -22,7 +22,7 @@
     },
     "homepage": "https://github.com/benbaran/msal-angular#readme",
     "dependencies": {
-        "msal": "^0.1.6"
+        "msal": "^0.1.5"
     },
     "devDependencies": {
         "@angular/common": "^6.0.0",
