@@ -8,13 +8,18 @@ export const MSAL_CONFIG = new InjectionToken<string>('MSAL_CONFIG');
 export class MsalService {
 
   public error: string;
-  public user: any;
-
   private app: Msal.UserAgentApplication;
 
   constructor(@Inject(MSAL_CONFIG) private config: MsalConfig) {
-    const authority = (config.tenant && config.signUpSignInPolicy) ?
-      `https://login.microsoftonline.com/tfp/${config.tenant}/${config.signUpSignInPolicy}` : '';
+    // set default values.
+    this.config = {
+      ...this.config,
+      popup: !(this.config.popup == null) ? this.config.popup : true,
+      callback: this.config.callback ? this.config.callback : () => { },
+      redirectUrl: this.config.redirectUrl ? this.config.redirectUrl : window.location.href,
+      navigateToLoginRequestUrl: !(this.config.navigateToLoginRequestUrl == null) ? this.config.navigateToLoginRequestUrl : false
+    }
+    const authority = config.authority;
     this.app = new Msal.UserAgentApplication(config.clientID, authority, config.callback,
       {
         navigateToLoginRequestUrl: this.config.navigateToLoginRequestUrl,
@@ -23,7 +28,7 @@ export class MsalService {
   }
 
   public getUser() {
-    return this.authenticated.then(isauthenticated => isauthenticated ? this.user : {});
+    return this.authenticated.then(isauthenticated => isauthenticated ? this.app.getUser() : {});
   }
 
   get authenticated() {
@@ -55,7 +60,6 @@ export class MsalService {
   }
 
   public logout() {
-    this.user = null;
     this.app.logout();
   }
 

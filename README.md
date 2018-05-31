@@ -6,7 +6,7 @@ This is a wrapper module to authenticate Angular applications to the Azure v2 en
 
 
 ## Change Log
-
+ 
 ### 2.0.2
  - Added an option to redirect instead of the popup login
  - Added configuration options navigateToLoginRequestUrl, redirectUrl and callback.
@@ -47,8 +47,7 @@ npm install msal-angular --save
   imports: [MsalModule.forRoot({
       clientID: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
       graphScopes: ["openid"],
-      signUpSignInPolicy: '',
-      tenant: 'xxx.onmicrosoft.com'
+      authority: 'https://login.microsoftonline.com/<tenant>.onmicrosoft.com'
     })]
   })
   export class AppModule { }
